@@ -9,7 +9,7 @@ A comprehensive web application for managing employee kit distribution in your c
 - SQLite database with Stock and Employee tables
 - Automatic stock deduction when employees receive items
 - Low stock alerts (triggers when items < 30)
-- Email notifications to bansrijiyani07@gmail.com
+- Email notifications to user@gmail.com
 - Employee validation (unique employee_id, email format)
 - T-shirt size management (S/M/L/XL/XXL/XXXL)
 

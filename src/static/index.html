@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-boxes"></i> Infopercept Inventory</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </li>
+                <li class="nav-item" data-page="stock">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Stock Management</span>
+                </li>
+                <li class="nav-item" data-page="employees">
+                    <i class="fas fa-users"></i>
+                    <span>Employee Management</span>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1 id="page-title">Dashboard</h1>
+                <div class="header-actions">
+                    <div class="search-container" id="search-container" style="display: none;">
+                        <input type="text" id="search-input" placeholder="Search employees...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <button class="btn btn-primary" id="add-employee-btn" style="display: none;">
+                        <i class="fas fa-plus"></i> Add Employee
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-employees">0</h3>
+                            <p>Total Employees</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="bags-distributed">0</h3>
+                            <p>Bags Distributed</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-pen"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="pens-distributed">0</h3>
+                            <p>Pens Distributed</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="diaries-distributed">0</h3>
+                            <p>Diaries Distributed</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-wine-bottle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="bottles-distributed">0</h3>
+                            <p>Bottles Distributed</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="tshirt-s-distributed">0</h3>
+                            <p>T-shirt S Distributed</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="tshirt-m-distributed">0</h3>
+                            <p>T-shirt M Distributed</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="tshirt-l-distributed">0</h3>
+                            <p>T-shirt L Distributed</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="tshirt-xl-distributed">0</h3>
+                            <p>T-shirt XL Distributed</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="tshirt-xxl-distributed">0</h3>
+                            <p>T-shirt XXL Distributed</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="tshirt-xxxl-distributed">0</h3>
+                            <p>T-shirt XXXL Distributed</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alerts-section">
+                    <h2>Low Stock Alerts</h2>
+                    <div id="low-stock-alerts" class="alerts-container">
+                        <!-- Low stock alerts will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stock Management Page -->
+            <div id="stock-page" class="page">
+                <div class="stock-grid" id="stock-grid">
+                    <!-- Stock items will be populated here -->
+                     hello
+                </div>
+            </div>
+
+            <!-- Employee Management Page -->
+            <div id="employees-page" class="page">
+                <div class="employees-grid" id="employees-grid">
+                    <!-- Employees will be populated here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Employee Modal -->
+    <div id="add-employee-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Employee</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="add-employee-form">
+                <div class="form-group">
+                    <label for="employee-id">Employee ID *</label>
+                    <input type="text" id="employee-id" name="employee_id" required>
+                </div>
+                <div class="form-group">
+                    <label for="employee-name">Name *</label>
+                    <input type="text" id="employee-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="employee-email">Email *</label>
+                    <input type="email" id="employee-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="employee-department">Department *</label>
+                    <input type="text" id="employee-department" name="department" required>
+                </div>
+                <div class="form-group">
+                    <label for="employee-designation">Designation *</label>
+                    <input type="text" id="employee-designation" name="designation" required>
+                </div>
+                
+                <h3>Kit Items</h3>
+                <div class="kit-items-grid">
+                    <div class="kit-item">
+                        <label>Bag</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" data-item="bag">-</button>
+                            <input type="number" name="bag_quantity" value="0" min="0" readonly>
+                            <button type="button" class="qty-btn plus" data-item="bag">+</button>
+                        </div>
+                    </div>
+                    <div class="kit-item">
+                        <label>Pen</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" data-item="pen">-</button>
+                            <input type="number" name="pen_quantity" value="0" min="0" readonly>
+                            <button type="button" class="qty-btn plus" data-item="pen">+</button>
+                        </div>
+                    </div>
+                    <div class="kit-item">
+                        <label>Diary</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" data-item="diary">-</button>
+                            <input type="number" name="diary_quantity" value="0" min="0" readonly>
+                            <button type="button" class="qty-btn plus" data-item="diary">+</button>
+                        </div>
+                    </div>
+                    <div class="kit-item">
+                        <label>Bottle</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" data-item="bottle">-</button>
+                            <input type="number" name="bottle_quantity" value="0" min="0" readonly>
+                            <button type="button" class="qty-btn plus" data-item="bottle">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>T-shirt Sizes</h3>
+                <div class="tshirt-sizes-grid">
+                    <div class="kit-item">
+                        <label>S</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" data-item="tshirt_s">-</button>
+                            <input type="number" name="tshirt_s_quantity" value="0" min="0" readonly>
+                            <button type="button" class="qty-btn plus" data-item="tshirt_s">+</button>
+                        </div>
+                    </div>
+                    <div class="kit-item">
+                        <label>M</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" data-item="tshirt_m">-</button>
+                            <input type="number" name="tshirt_m_quantity" value="0" min="0" readonly>
+                            <button type="button" class="qty-btn plus" data-item="tshirt_m">+</button>
+                        </div>
+                    </div>
+                    <div class="kit-item">
+                        <label>L</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" data-item="tshirt_l">-</button>
+                            <input type="number" name="tshirt_l_quantity" value="0" min="0" readonly>
+                            <button type="button" class="qty-btn plus" data-item="tshirt_l">+</button>
+                        </div>
+                    </div>
+                    <div class="kit-item">
+                        <label>XL</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" data-item="tshirt_xl">-</button>
+                            <input type="number" name="tshirt_xl_quantity" value="0" min="0" readonly>
+                            <button type="button" class="qty-btn plus" data-item="tshirt_xl">+</button>
+                        </div>
+                    </div>
+                    <div class="kit-item">
+                        <label>XXL</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" data-item="tshirt_xxl">-</button>
+                            <input type="number" name="tshirt_xxl_quantity" value="0" min="0" readonly>
+                            <button type="button" class="qty-btn plus" data-item="tshirt_xxl">+</button>
+                        </div>
+                    </div>
+                    <div class="kit-item">
+                        <label>XXXL</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" data-item="tshirt_xxxl">-</button>
+                            <input type="number" name="tshirt_xxxl_quantity" value="0" min="0" readonly>
+                            <button type="button" class="qty-btn plus" data-item="tshirt_xxxl">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-employee">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Employee</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Update Employee Modal -->
+    <div id="update-employee-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Update Employee</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="update-employee-form">
+                <input type="hidden" id="update-employee-id" name="employee_id">
+                <div class="form-group">
+                    <label for="update-employee-name">Name *</label>
+                    <input type="text" id="update-employee-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="update-employee-email">Email *</label>
+                    <input type="email" id="update-employee-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="update-employee-department">Department *</label>
+                    <input type="text" id="update-employee-department" name="department" required>
+                </div>
+                <div class="form-group">
+                    <label for="update-employee-designation">Designation *</label>
+                    <input type="text" id="update-employee-designation" name="designation" required>
+                </div>
+                
+                <h3>Kit Items</h3>
+                <div class="kit-items-grid" id="update-kit-items">
+                    <!-- Kit items will be populated dynamically -->
+                </div>
+
+                <h3>T-shirt Sizes</h3>
+                <div class="tshirt-sizes-grid" id="update-tshirt-sizes">
+                    <!-- T-shirt sizes will be populated dynamically -->
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-update-employee">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Employee</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Update Stock Modal -->
+    <div id="update-stock-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Update Stock</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="update-stock-form">
+                <input type="hidden" id="stock-item-name" name="item_name">
+                <div class="form-group">
+                    <label for="stock-item-display">Item</label>
+                    <input type="text" id="stock-item-display" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="stock-quantity">New Quantity</label>
+                    <input type="number" id="stock-quantity" name="quantity" min="0" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-stock">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Stock</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

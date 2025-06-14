@@ -7,8 +7,8 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
-    color: #2d3748;
+    background-color: #f0f4f8;
+    color: #1a365d;
     line-height: 1.6;
 }
 
@@ -21,7 +21,7 @@ body {
 /* Sidebar */
 .sidebar {
     width: 260px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
     color: white;
     position: fixed;
     height: 100vh;
@@ -33,6 +33,7 @@ body {
 .sidebar-header {
     padding: 2rem 1.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .sidebar-header h2 {
@@ -41,6 +42,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    color: #ffffff;
 }
 
 .nav-menu {
@@ -56,16 +58,19 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     border-left: 4px solid transparent;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .nav-item:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    border-left-color: rgba(255, 255, 255, 0.5);
+    border-left-color: #60a5fa;
+    color: #ffffff;
 }
 
 .nav-item.active {
     background-color: rgba(255, 255, 255, 0.15);
-    border-left-color: white;
+    border-left-color: #60a5fa;
+    color: #ffffff;
 }
 
 .nav-item i {
@@ -77,7 +82,7 @@ body {
 .main-content {
     flex: 1;
     margin-left: 260px;
-    background-color: #f8f9fa;
+    background-color: #f0f4f8;
 }
 
 /* Header */
@@ -94,7 +99,7 @@ body {
 .header h1 {
     font-size: 1.875rem;
     font-weight: 600;
-    color: #2d3748;
+    color: #1e40af;
 }
 
 .header-actions {
@@ -116,12 +121,13 @@ body {
     font-size: 0.875rem;
     width: 300px;
     transition: all 0.3s ease;
+    background-color: #f8fafc;
 }
 
 .search-container input:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .search-container i {
@@ -146,13 +152,14 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
     color: white;
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.1);
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2);
 }
 
 .btn-secondary {
@@ -200,8 +207,9 @@ body {
 .stat-card {
     background: white;
     padding: 1.5rem;
-    border-radius: 0.75rem;
+    border-radius: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -216,8 +224,8 @@ body {
 .stat-icon {
     width: 60px;
     height: 60px;
-    border-radius: 0.75rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -247,14 +255,15 @@ body {
 .stock-item {
     background: white;
     padding: 1.5rem;
-    border-radius: 0.75rem;
+    border-radius: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
     transition: all 0.3s ease;
 }
 
 .stock-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
 }
 
 .stock-item-header {
@@ -401,18 +410,22 @@ body {
 
 .alert {
     background: white;
-    border-left: 4px solid #e53e3e;
+    border-radius: 0.75rem;
     padding: 1rem 1.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
 }
 
 .alert-warning {
-    border-left-color: #ed8936;
+    background-color: #fff7ed;
+    border-color: #fdba74;
+    color: #9a3412;
 }
 
 .alert-info {
-    border-left-color: #3182ce;
+    background-color: #eff6ff;
+    border-color: #93c5fd;
+    color: #1e40af;
 }
 
 .alert h4 {
@@ -452,8 +465,9 @@ body {
 
 .modal-content {
     background: white;
-    border-radius: 0.75rem;
-    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 1rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e2e8f0;
     width: 90%;
     max-width: 600px;
     max-height: 90vh;
@@ -467,17 +481,19 @@ body {
 }
 
 .modal-header {
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 1rem 1rem 0 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem;
-    border-bottom: 1px solid #e2e8f0;
 }
 
 .modal-header h2 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #2d3748;
+    color: #ffffff;
 }
 
 .close {
@@ -508,20 +524,22 @@ form {
 }
 
 .form-group input,
-.form-group select {
-    width: 100%;
-    padding: 0.75rem;
+.form-group select,
+.form-group textarea {
     border: 2px solid #e2e8f0;
     border-radius: 0.5rem;
-    font-size: 0.875rem;
+    padding: 0.75rem 1rem;
+    width: 100%;
     transition: all 0.3s ease;
+    background-color: #f8fafc;
 }
 
 .form-group input:focus,
-.form-group select:focus {
+.form-group select:focus,
+.form-group textarea:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 /* Kit Items */
@@ -645,21 +663,21 @@ form {
 
 .toast {
     background: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
     padding: 1rem 1.5rem;
     margin-bottom: 0.5rem;
-    border-left: 4px solid #38a169;
     animation: toastSlideIn 0.3s ease;
     max-width: 400px;
 }
 
 .toast.error {
-    border-left-color: #e53e3e;
+    border-left: 4px solid #dc2626;
 }
 
 .toast.warning {
-    border-left-color: #ed8936;
+    border-left: 4px solid #d97706;
 }
 
 @keyframes toastSlideIn {

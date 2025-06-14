@@ -16,6 +16,13 @@ const addEmployeeModal = document.getElementById("add-employee-modal");
 const updateEmployeeModal = document.getElementById("update-employee-modal");
 const updateStockModal = document.getElementById("update-stock-modal");
 
+// Add New Item Modal logic
+const addItemBtn = document.getElementById('add-item-btn');
+const addItemModal = document.getElementById('add-item-modal');
+const closeAddItemModal = document.getElementById('close-add-item-modal');
+const cancelAddItem = document.getElementById('cancel-add-item');
+const addItemForm = document.getElementById('add-item-form');
+
 // Initialize app
 document.addEventListener("DOMContentLoaded", function() {
     initializeApp();
@@ -79,6 +86,45 @@ function setupEventListeners() {
             closeModal(e.target);
         }
     });
+
+    // Add New Item Modal logic
+    if (addItemBtn) {
+        addItemBtn.addEventListener('click', () => {
+            addItemModal.style.display = 'block';
+        });
+    }
+    if (closeAddItemModal) {
+        closeAddItemModal.addEventListener('click', () => {
+            addItemModal.style.display = 'none';
+        });
+    }
+    if (cancelAddItem) {
+        cancelAddItem.addEventListener('click', () => {
+            addItemModal.style.display = 'none';
+        });
+    }
+    if (addItemForm) {
+        addItemForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const itemName = document.getElementById('new-item-name').value.trim();
+            const quantity = parseInt(document.getElementById('new-item-quantity').value);
+            const dangerLevel = parseInt(document.getElementById('new-item-danger').value);
+            try {
+                const response = await fetch(`${API_BASE_URL}/stock`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ item_name: itemName, quantity, danger_level: dangerLevel })
+                });
+                if (!response.ok) throw new Error('Failed to add item');
+                showToast('Item added successfully!');
+                addItemModal.style.display = 'none';
+                loadStock();
+                loadDashboardData();
+            } catch (error) {
+                showToast('Error adding item', 'error');
+            }
+        });
+    }
 }
 
 function setupQuantityControls() {
@@ -213,20 +259,77 @@ async function loadStock() {
 
 function displayStock(stockItems) {
     const stockGrid = document.getElementById("stock-grid");
-    
     stockGrid.innerHTML = stockItems.map(item => `
         <div class="stock-item">
             <div class="stock-item-header">
                 <div class="stock-item-name">${formatItemName(item.item_name)}</div>
                 <div class="stock-quantity ${item.quantity <= item.danger_level ? 'low' : ''}">${item.quantity}</div>
             </div>
+            <div class="danger-level-label" style="margin: 0.5rem 0 1rem 0;">
+                Danger Level: <span class="danger-level-value">${item.danger_level}</span>
+                <i class="fas fa-edit edit-danger-level" data-item="${item.item_name}" style="cursor:pointer; margin-left:6px;"></i>
+            </div>
             <div class="stock-actions">
                 <button class="btn btn-primary" onclick="openUpdateStockModal('${item.item_name}', ${item.quantity})">
                     <i class="fas fa-edit"></i> Update
                 </button>
+                <button class="btn btn-danger delete-stock-btn" data-item="${item.item_name}">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
             </div>
         </div>
     `).join("");
+    addStockItemEventListeners();
+}
+
+function addStockItemEventListeners() {
+    // Delete button
+    document.querySelectorAll('.delete-stock-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const item = this.dataset.item;
+            if (!confirm('Are you sure you want to delete this item?')) return;
+            try {
+                const response = await fetch(`${API_BASE_URL}/stock/${item}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Failed to delete item');
+                showToast('Item deleted successfully!');
+                loadStock();
+                loadDashboardData();
+            } catch (error) {
+                showToast('Error deleting item', 'error');
+            }
+        });
+    });
+    // Edit danger level
+    document.querySelectorAll('.edit-danger-level').forEach(icon => {
+        icon.addEventListener('click', function() {
+            const item = this.dataset.item;
+            const valueSpan = this.closest('.danger-level-label').querySelector('.danger-level-value');
+            const currentValue = valueSpan.textContent;
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.value = currentValue;
+            input.min = 0;
+            input.style.width = '60px';
+            valueSpan.replaceWith(input);
+            input.focus();
+            input.addEventListener('blur', async function() {
+                const newValue = parseInt(input.value);
+                try {
+                    const response = await fetch(`${API_BASE_URL}/stock/${item}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ danger_level: newValue })
+                    });
+                    if (!response.ok) throw new Error('Failed to update danger level');
+                    showToast('Danger level updated!');
+                    loadStock();
+                    loadDashboardData();
+                } catch (error) {
+                    showToast('Error updating danger level', 'error');
+                }
+            });
+        });
+    });
 }
 
 async function loadEmployees(searchQuery = "") {
@@ -588,10 +691,18 @@ function showToast(message, type = "success") {
 }
 
 function formatItemName(itemName) {
-    return itemName
-        .replace(/_/g, " ")
-        .replace(/\b\w/g, l => l.toUpperCase())
-        .replace("Tshirt", "T-shirt");
+    // Format T-shirt items
+    const tshirtMap = {
+        'tshirt_s': 'T-shirt S',
+        'tshirt_m': 'T-shirt M',
+        'tshirt_l': 'T-shirt L',
+        'tshirt_xl': 'T-shirt XL',
+        'tshirt_xxl': 'T-shirt XXL',
+        'tshirt_xxxl': 'T-shirt XXXL'
+    };
+    if (tshirtMap[itemName]) return tshirtMap[itemName];
+    // Capitalize first letter for other items
+    return itemName.charAt(0).toUpperCase() + itemName.slice(1);
 }
 
 function debounce(func, wait) {

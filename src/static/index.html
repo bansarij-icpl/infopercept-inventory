@@ -160,6 +160,9 @@
 
             <!-- Stock Management Page -->
             <div id="stock-page" class="page">
+                <div class="add-item-container" style="margin-bottom: 1.5rem;">
+                    <button class="btn btn-primary" id="add-item-btn"><i class="fas fa-plus"></i> Add New Item</button>
+                </div>
                 <div class="stock-grid" id="stock-grid">
                     <!-- Stock items will be populated here -->
                      hello
@@ -364,6 +367,35 @@
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="cancel-stock">Cancel</button>
                     <button type="submit" class="btn btn-primary">Update Stock</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add New Item Modal -->
+    <div id="add-item-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Inventory Item</h2>
+                <span class="close" id="close-add-item-modal">&times;</span>
+            </div>
+            <form id="add-item-form">
+                <div class="form-group">
+                    <label for="new-item-name">Item Name *</label>
+                    <input type="text" id="new-item-name" name="item_name" required>
+                    <small style="color:#2563eb;">For T-shirt items, use: tshirt_s, tshirt_m, tshirt_l, tshirt_xl, tshirt_xxl, tshirt_xxxl</small>
+                </div>
+                <div class="form-group">
+                    <label for="new-item-quantity">Quantity *</label>
+                    <input type="number" id="new-item-quantity" name="quantity" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-item-danger">Danger Level *</label>
+                    <input type="number" id="new-item-danger" name="danger_level" min="0" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-add-item">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Item</button>
                 </div>
             </form>
         </div>

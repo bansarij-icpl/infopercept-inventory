@@ -29,27 +29,49 @@ def get_stock_item(item_name):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@stock_bp.route("/stock/<item_name>", methods=["PUT"])
-def update_stock_item(item_name):
-    """Update stock quantity for an item"""
+@stock_bp.route("/stock/<item_name>", methods=["DELETE"])
+def delete_stock_item(item_name):
+    """Delete a stock item"""
     try:
-        data = request.get_json()
-        if not data or "quantity" not in data:
-            return jsonify({"error": "Quantity is required"}), 400
-        
         item = Stock.query.filter_by(item_name=item_name).first()
         if not item:
             return jsonify({"error": "Item not found"}), 404
-        
-        new_quantity = int(data["quantity"])
-        if new_quantity < 0:
-            return jsonify({"error": "Quantity cannot be negative"}), 400
-        
-        item.quantity = new_quantity
+        db.session.delete(item)
         db.session.commit()
-        
+        return jsonify({"message": "Item deleted successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+@stock_bp.route("/stock/<item_name>", methods=["PUT"])
+def update_stock_item(item_name):
+    """Update stock quantity or danger level for an item"""
+    try:
+        data = request.get_json()
+        item = Stock.query.filter_by(item_name=item_name).first()
+        if not item:
+            return jsonify({"error": "Item not found"}), 404
+
+        updated = False
+        if "quantity" in data:
+            new_quantity = int(data["quantity"])
+            if new_quantity < 0:
+                return jsonify({"error": "Quantity cannot be negative"}), 400
+            item.quantity = new_quantity
+            updated = True
+
+        if "danger_level" in data:
+            new_danger_level = int(data["danger_level"])
+            if new_danger_level < 0:
+                return jsonify({"error": "Danger level cannot be negative"}), 400
+            item.danger_level = new_danger_level
+            updated = True
+
+        if not updated:
+            return jsonify({"error": "No valid fields to update"}), 400
+
+        db.session.commit()
         check_and_send_low_stock_alert()
-        
         return jsonify(item.to_dict()), 200
     except Exception as e:
         db.session.rollback()
@@ -94,6 +116,31 @@ def check_low_stock():
         else:
             return jsonify({"message": "No low stock items found"}), 200
     except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@stock_bp.route("/stock", methods=["POST"])
+def create_stock_item():
+    """Create a new stock item"""
+    try:
+        data = request.get_json()
+        if not data or "item_name" not in data or "quantity" not in data or "danger_level" not in data:
+            return jsonify({"error": "item_name, quantity, and danger_level are required"}), 400
+
+        # Check if item already exists
+        existing = Stock.query.filter_by(item_name=data["item_name"]).first()
+        if existing:
+            return jsonify({"error": "Item already exists"}), 400
+
+        new_item = Stock(
+            item_name=data["item_name"],
+            quantity=int(data["quantity"]),
+            danger_level=int(data["danger_level"])
+        )
+        db.session.add(new_item)
+        db.session.commit()
+        return jsonify(new_item.to_dict()), 201
+    except Exception as e:
+        db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
 def check_and_send_low_stock_alert():

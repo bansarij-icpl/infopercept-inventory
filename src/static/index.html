@@ -12,19 +12,19 @@
         <!-- Sidebar Navigation -->
         <nav class="sidebar">
             <div class="sidebar-header">
-                <h2><i class="fas fa-boxes"></i> Infopercept Inventory</h2>
+                <h2 style="display: flex; align-items: center; gap: 0.75rem;">
+                    <img src="static/logo.png" alt="Logo" style="height: 32px; width: 32px; object-fit: contain; vertical-align: middle;" />
+                    <span>Infopercept Inventory</span>
+                </h2>
             </div>
             <ul class="nav-menu">
                 <li class="nav-item active" data-page="dashboard">
-                    <i class="fas fa-chart-pie"></i>
                     <span>Dashboard</span>
                 </li>
                 <li class="nav-item" data-page="stock">
-                    <i class="fas fa-warehouse"></i>
                     <span>Stock Management</span>
                 </li>
                 <li class="nav-item" data-page="employees">
-                    <i class="fas fa-users"></i>
                     <span>Employee Management</span>
                 </li>
             </ul>
@@ -163,7 +163,7 @@
                 
                 <h2 style="margin-top: 20px; margin-bottom: 20px;">Standard Items
 
-                    <button class="btn btn-success" id="add-stock-item-btn" style="margin-bottom: 20px; margin-left: 1220px;">
+                    <button class="btn btn-success" id="add-stock-item-btn" style="margin-bottom: 20px; margin-left: 1370px;">
                         <i class="fas fa-plus"></i> Add New Item
                     </button>
 
@@ -203,20 +203,24 @@
                     <input type="text" id="employee-id" name="employee_id" required>
                 </div>
                 <div class="form-group">
-                    <label for="employee-name">Name *</label>
-                    <input type="text" id="employee-name" name="name" required>
+                    <label for="employee-first-name">First Name *</label>
+                    <input type="text" id="employee-first-name" name="first_name" required>
                 </div>
                 <div class="form-group">
-                    <label for="employee-email">Email *</label>
-                    <input type="email" id="employee-email" name="email" required>
+                    <label for="employee-last-name">Last Name *</label>
+                    <input type="text" id="employee-last-name" name="last_name" required>
                 </div>
                 <div class="form-group">
-                    <label for="employee-department">Department *</label>
-                    <input type="text" id="employee-department" name="department" required>
+                    <label for="employee-emergency-no">Emergency No *</label>
+                    <input type="text" id="employee-emergency-no" name="emergency_no" required>
                 </div>
                 <div class="form-group">
-                    <label for="employee-designation">Designation *</label>
-                    <input type="text" id="employee-designation" name="designation" required>
+                    <label for="employee-blood-group">Blood Group *</label>
+                    <input type="text" id="employee-blood-group" name="blood_group" required>
+                </div>
+                <div class="form-group">
+                    <label for="employee-department">Department Name *</label>
+                    <input type="text" id="employee-department" name="department_name" required>
                 </div>
                 
                 <h3>Kit Items</h3>
@@ -325,20 +329,24 @@
             <form id="update-employee-form">
                 <input type="hidden" id="update-employee-id" name="employee_id">
                 <div class="form-group">
-                    <label for="update-employee-name">Name *</label>
-                    <input type="text" id="update-employee-name" name="name" required>
+                    <label for="update-employee-first-name">First Name *</label>
+                    <input type="text" id="update-employee-first-name" name="first_name" required>
                 </div>
                 <div class="form-group">
-                    <label for="update-employee-email">Email *</label>
-                    <input type="email" id="update-employee-email" name="email" required>
+                    <label for="update-employee-last-name">Last Name *</label>
+                    <input type="text" id="update-employee-last-name" name="last_name" required>
                 </div>
                 <div class="form-group">
-                    <label for="update-employee-department">Department *</label>
-                    <input type="text" id="update-employee-department" name="department" required>
+                    <label for="update-employee-emergency-no">Emergency No *</label>
+                    <input type="text" id="update-employee-emergency-no" name="emergency_no" required>
                 </div>
                 <div class="form-group">
-                    <label for="update-employee-designation">Designation *</label>
-                    <input type="text" id="update-employee-designation" name="designation" required>
+                    <label for="update-employee-blood-group">Blood Group *</label>
+                    <input type="text" id="update-employee-blood-group" name="blood_group" required>
+                </div>
+                <div class="form-group">
+                    <label for="update-employee-department">Department Name *</label>
+                    <input type="text" id="update-employee-department" name="department_name" required>
                 </div>
                 
                 <h3>Kit Items</h3>

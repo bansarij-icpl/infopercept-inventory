@@ -19,34 +19,32 @@ class Stock(db.Model):
 
 class Employee(db.Model):
     employee_id = db.Column(db.String(50), primary_key=True, unique=True, nullable=False)
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    department = db.Column(db.String(100), nullable=False)
-    designation = db.Column(db.String(100), nullable=False)
+    first_name = db.Column(db.String(100), nullable=False)
+    last_name = db.Column(db.String(100), nullable=False)
+    emergency_no = db.Column(db.String(20), nullable=False)
+    blood_group = db.Column(db.String(10), nullable=False)
+    department_name = db.Column(db.String(100), nullable=False)
     
-    # Change these from Boolean to Integer for quantity tracking
     bag_quantity = db.Column(db.Integer, nullable=False, default=0)
     pen_quantity = db.Column(db.Integer, nullable=False, default=0)
     diary_quantity = db.Column(db.Integer, nullable=False, default=0)
     bottle_quantity = db.Column(db.Integer, nullable=False, default=0)
-    
-    # T-shirt size and quantity
     tshirt_s_quantity = db.Column(db.Integer, nullable=False, default=0)
     tshirt_m_quantity = db.Column(db.Integer, nullable=False, default=0)
     tshirt_l_quantity = db.Column(db.Integer, nullable=False, default=0)
     tshirt_xl_quantity = db.Column(db.Integer, nullable=False, default=0)
     tshirt_xxl_quantity = db.Column(db.Integer, nullable=False, default=0)
     tshirt_xxxl_quantity = db.Column(db.Integer, nullable=False, default=0)
-
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
         return {
             "employee_id": self.employee_id,
-            "name": self.name,
-            "email": self.email,
-            "department": self.department,
-            "designation": self.designation,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "emergency_no": self.emergency_no,
+            "blood_group": self.blood_group,
+            "department_name": self.department_name,
             "bag_quantity": self.bag_quantity,
             "pen_quantity": self.pen_quantity,
             "diary_quantity": self.diary_quantity,

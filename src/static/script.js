@@ -120,6 +120,15 @@ function setupEventListeners() {
             document.getElementById("stock-current-quantity").textContent = pendingStockQuantity;
         };
     }
+
+    // Event delegation for dynamically created restock buttons in alerts
+    document.getElementById("low-stock-alerts").addEventListener("click", function(e) {
+        if (e.target.classList.contains("restock-btn")) {
+            const itemName = e.target.getAttribute("data-item");
+            const quantity = parseInt(e.target.getAttribute("data-quantity")) || 0;
+            openUpdateStockModal(itemName, quantity);
+        }
+    });
 }
 
 function setupQuantityControls() {
@@ -221,18 +230,26 @@ function updateLowStockAlerts(lowStockItems) {
     
     if (lowStockItems.length === 0) {
         alertsContainer.innerHTML = `
-            <div class="alert alert-info">
-                <h4>All Good!</h4>
-                <p>No items are currently low in stock.</p>
+            <div class="alert alert-info" style="border-left: 4px solid #667eea; background: #f4f7ff; padding: 1.5rem; border-radius: 1rem; margin-bottom: 1rem;">
+                <h4 style="color: #2d3748; margin-bottom: 0.5rem;">All Good!</h4>
+                <p style="color: #4a5568;">No items are currently low in stock.</p>
             </div>
         `;
         return;
     }
 
     alertsContainer.innerHTML = lowStockItems.map(item => `
-        <div class="alert">
-            <h4>Low Stock Alert: ${item.name}</h4>
-            <p>Current quantity: ${item.quantity} (Danger level: ${item.danger_level})</p>
+        <div class="alert alert-warning" style="display: flex; align-items: center; justify-content: flex-start; border-left: 4px solid #e53e3e; background: #fff5f5; padding: 1.5rem; border-radius: 1rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(229,62,62,0.08);">
+            <div style="flex: 1;">
+                <h4 style="color: #c53030; margin-bottom: 0.5rem; font-weight: 700;">Low Stock Alert: <span style='text-transform: capitalize;'>${item.name || item.item_name}</span></h4>
+                <p style="color: #a94442; margin-bottom: 1rem;">Current quantity: <b>${item.quantity}</b> <span style='color:#718096;'>(Danger level: ${item.danger_level})</span></p>
+                <button class="btn btn-primary restock-btn" 
+                    style="background: linear-gradient(135deg, #5161a6 0%, #091239 100%); color: white; font-weight: 600; border: none; border-radius: 0.5rem; padding: 0.6rem 1.5rem; box-shadow: 0 2px 8px rgba(102,126,234,0.08); margin-top: 0.5rem; margin-left: 280px;" 
+                    data-item="${item.item_name || item.name}" 
+                    data-quantity="${item.quantity}">
+                    <i class="fas fa-plus-circle"></i> Restock Item
+                </button>
+            </div>
         </div>
     `).join("");
 }
@@ -321,14 +338,14 @@ function displayEmployees(employees) {
         <div class="employee-card">
             <div class="employee-header">
                 <div class="employee-info">
-                    <h3>${employee.name}</h3>
-                    <p>${employee.email}</p>
+                    <h3>${employee.first_name} ${employee.last_name}</h3>
                 </div>
                 <div class="employee-id">${employee.employee_id}</div>
             </div>
             <div class="employee-details">
-                <p><strong>Department:</strong> ${employee.department}</p>
-                <p><strong>Designation:</strong> ${employee.designation}</p>
+                <p><strong>Department:</strong> ${employee.department_name}</p>
+                <p><strong>Blood Group:</strong> ${employee.blood_group}</p>
+                <p><strong>Emergency No:</strong> ${employee.emergency_no}</p>
             </div>
             <div class="employee-items">
                 <h4>Items Received</h4>

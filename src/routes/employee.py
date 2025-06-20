@@ -16,14 +16,10 @@ def validate_employee_data(data, is_update=False):
     
     if not is_update:
         # Required fields for new employee
-        required_fields = ["employee_id", "name", "email", "department", "designation"]
+        required_fields = ["employee_id", "first_name", "last_name", "emergency_no", "blood_group", "department_name"]
         for field in required_fields:
             if not data.get(field):
                 errors.append(f"{field} is required")
-    
-    # Validate email format if provided
-    if data.get("email") and not validate_email(data["email"]):
-        errors.append("Invalid email format")
     
     # Validate quantities if provided
     item_fields = ["bag_quantity", "pen_quantity", "diary_quantity", "bottle_quantity",
@@ -51,10 +47,11 @@ def get_all_employees():
             employees = Employee.query.filter(
                 db.or_(
                     Employee.employee_id.ilike(f"%{search_query}%"),
-                    Employee.name.ilike(f"%{search_query}%"),
-                    Employee.email.ilike(f"%{search_query}%"),
-                    Employee.department.ilike(f"%{search_query}%"),
-                    Employee.designation.ilike(f"%{search_query}%")
+                    Employee.first_name.ilike(f"%{search_query}%"),
+                    Employee.last_name.ilike(f"%{search_query}%"),
+                    Employee.emergency_no.ilike(f"%{search_query}%"),
+                    Employee.blood_group.ilike(f"%{search_query}%"),
+                    Employee.department_name.ilike(f"%{search_query}%")
                 )
             ).all()
         else:
@@ -92,16 +89,13 @@ def create_employee():
         if existing_employee:
             return jsonify({"error": "Employee ID already exists"}), 400
         
-        existing_email = Employee.query.filter_by(email=data["email"]).first()
-        if existing_email:
-            return jsonify({"error": "Email already exists"}), 400
-        
         employee = Employee(
             employee_id=data["employee_id"],
-            name=data["name"],
-            email=data["email"],
-            department=data["department"],
-            designation=data["designation"],
+            first_name=data["first_name"],
+            last_name=data["last_name"],
+            emergency_no=data["emergency_no"],
+            blood_group=data["blood_group"],
+            department_name=data["department_name"],
             bag_quantity=data.get("bag_quantity", 0),
             pen_quantity=data.get("pen_quantity", 0),
             diary_quantity=data.get("diary_quantity", 0),
@@ -154,23 +148,17 @@ def update_employee(employee_id):
         if errors:
             return jsonify({"errors": errors}), 400
         
-        if data.get("email") and data["email"] != employee.email:
-            existing_email = Employee.query.filter_by(email=data["email"]).first()
-            if existing_email:
-                return jsonify({"error": "Email already exists"}), 400
-        
-        # Store previous quantities for stock adjustment calculation
-        previous_quantities = employee.to_dict()
-
         # Update employee fields
-        if "name" in data:
-            employee.name = data["name"]
-        if "email" in data:
-            employee.email = data["email"]
-        if "department" in data:
-            employee.department = data["department"]
-        if "designation" in data:
-            employee.designation = data["designation"]
+        if "first_name" in data:
+            employee.first_name = data["first_name"]
+        if "last_name" in data:
+            employee.last_name = data["last_name"]
+        if "emergency_no" in data:
+            employee.emergency_no = data["emergency_no"]
+        if "blood_group" in data:
+            employee.blood_group = data["blood_group"]
+        if "department_name" in data:
+            employee.department_name = data["department_name"]
         
         # Update item quantities and calculate stock changes
         item_fields = {

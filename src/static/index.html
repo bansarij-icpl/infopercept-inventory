@@ -160,10 +160,25 @@
 
             <!-- Stock Management Page -->
             <div id="stock-page" class="page">
-                <div class="stock-grid" id="stock-grid">
-                    <!-- Stock items will be populated here -->
-                     hello
+                
+                <h2 style="margin-top: 20px; margin-bottom: 20px;">Standard Items
+
+                    <button class="btn btn-success" id="add-stock-item-btn" style="margin-bottom: 20px; margin-left: 1220px;">
+                        <i class="fas fa-plus"></i> Add New Item
+                    </button>
+
+                </h2>
+                
+                <div class="stock-grid" id="stock-grid-standard">
+                    <!-- Standard stock items will be populated here -->
                 </div>
+                
+                <h2 style="margin-top: 20px; margin-bottom: 20px;">T-shirt Stock</h2>
+                <div class="stock-grid" id="stock-grid-tshirts">
+                    <!-- T-shirt stock items will be populated here -->
+                </div>
+
+                
             </div>
 
             <!-- Employee Management Page -->
@@ -358,13 +373,46 @@
                     <input type="text" id="stock-item-display" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="stock-quantity">New Quantity</label>
-                    <input type="number" id="stock-quantity" name="quantity" min="0" required>
+                    <label for="adjust-amount">Adjust Quantity</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" id="adjust-amount" min="1" value="1" style="width: 80px;">
+                        <button type="button" class="btn btn-success" id="increase-stock-btn">+</button>
+                        <button type="button" class="btn btn-danger" id="decrease-stock-btn">-</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Current Quantity</label>
+                    <span id="stock-current-quantity"></span>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="cancel-stock">Cancel</button>
                     <button type="submit" class="btn btn-primary">Update Stock</button>
                 </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Stock Item Modal -->
+    <div id="add-stock-item-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Stock Item</h2>
+                <span class="close" id="close-add-stock-item-modal">&times;</span>
+            </div>
+            <form id="add-stock-item-form">
+                <div class="form-group">
+                    <label for="new-item-name">Item Name *</label>
+                    <input type="text" id="new-item-name" name="item_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-item-quantity">Initial Quantity *</label>
+                    <input type="number" id="new-item-quantity" name="quantity" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-item-danger-level">Danger Level *</label>
+                    <input type="number" id="new-item-danger-level" name="danger_level" min="1" value="30" required>
+                </div>
+                <button type="submit" class="btn btn-success" id="add-item-btn" style="margin-left: 100px;">Add Item</button>
             </form>
         </div>
     </div>

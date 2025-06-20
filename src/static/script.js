@@ -1,6 +1,8 @@
 // Global variables
 const API_BASE_URL = "/api";
 
+let pendingStockQuantity = 0;
+
 // DOM elements
 const navItems = document.querySelectorAll(".nav-item");
 const pages = document.querySelectorAll(".page");
@@ -15,6 +17,11 @@ const toastContainer = document.getElementById("toast-container");
 const addEmployeeModal = document.getElementById("add-employee-modal");
 const updateEmployeeModal = document.getElementById("update-employee-modal");
 const updateStockModal = document.getElementById("update-stock-modal");
+
+// Add after modal DOM elements
+const addStockItemModal = document.getElementById("add-stock-item-modal");
+const addStockItemBtn = document.getElementById("add-stock-item-btn");
+const closeAddStockItemModalBtn = document.getElementById("close-add-stock-item-modal");
 
 // Initialize app
 document.addEventListener("DOMContentLoaded", function() {
@@ -79,6 +86,40 @@ function setupEventListeners() {
             closeModal(e.target);
         }
     });
+
+    // Add Stock Item button
+    if (addStockItemBtn) {
+        addStockItemBtn.addEventListener("click", () => {
+            showModal(addStockItemModal);
+        });
+    }
+    if (closeAddStockItemModalBtn) {
+        closeAddStockItemModalBtn.addEventListener("click", () => {
+            closeModal(addStockItemModal);
+        });
+    }
+    const addStockItemForm = document.getElementById("add-stock-item-form");
+    if (addStockItemForm) {
+        addStockItemForm.addEventListener("submit", handleAddStockItem);
+    }
+
+    // Update Stock Modal + and - buttons
+    const increaseBtn = document.getElementById("increase-stock-btn");
+    const decreaseBtn = document.getElementById("decrease-stock-btn");
+    const adjustAmountInput = document.getElementById("adjust-amount");
+    const stockItemNameInput = document.getElementById("stock-item-name");
+    if (increaseBtn && decreaseBtn && adjustAmountInput && stockItemNameInput) {
+        increaseBtn.onclick = () => {
+            const amount = parseInt(adjustAmountInput.value) || 1;
+            pendingStockQuantity += amount;
+            document.getElementById("stock-current-quantity").textContent = pendingStockQuantity;
+        };
+        decreaseBtn.onclick = () => {
+            const amount = parseInt(adjustAmountInput.value) || 1;
+            pendingStockQuantity = Math.max(0, pendingStockQuantity - amount);
+            document.getElementById("stock-current-quantity").textContent = pendingStockQuantity;
+        };
+    }
 }
 
 function setupQuantityControls() {
@@ -212,9 +253,21 @@ async function loadStock() {
 }
 
 function displayStock(stockItems) {
-    const stockGrid = document.getElementById("stock-grid");
+    const standardGrid = document.getElementById("stock-grid-standard");
+    const tshirtsGrid = document.getElementById("stock-grid-tshirts");
     
-    stockGrid.innerHTML = stockItems.map(item => `
+    const standardItems = [];
+    const tshirtItems = [];
+
+    stockItems.forEach(item => {
+        if (item.item_name.startsWith("tshirt_")) {
+            tshirtItems.push(item);
+        } else {
+            standardItems.push(item);
+        }
+    });
+
+    const renderItems = (items) => items.map(item => `
         <div class="stock-item">
             <div class="stock-item-header">
                 <div class="stock-item-name">${formatItemName(item.item_name)}</div>
@@ -227,6 +280,9 @@ function displayStock(stockItems) {
             </div>
         </div>
     `).join("");
+
+    standardGrid.innerHTML = renderItems(standardItems);
+    tshirtsGrid.innerHTML = renderItems(tshirtItems);
 }
 
 async function loadEmployees(searchQuery = "") {
@@ -403,8 +459,9 @@ function populateUpdateKitItems(employee) {
 function openUpdateStockModal(itemName, currentQuantity) {
     document.getElementById("stock-item-name").value = itemName;
     document.getElementById("stock-item-display").value = formatItemName(itemName);
-    document.getElementById("stock-quantity").value = currentQuantity;
-    
+    document.getElementById("adjust-amount").value = 1;
+    pendingStockQuantity = currentQuantity;
+    document.getElementById("stock-current-quantity").textContent = pendingStockQuantity;
     showModal(updateStockModal);
 }
 
@@ -493,20 +550,14 @@ async function handleUpdateEmployee(e) {
 
 async function handleUpdateStock(e) {
     e.preventDefault();
-    
     try {
         showLoading(true);
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData.entries());
-        
-        const response = await fetch(`${API_BASE_URL}/stock/${data.item_name}`, {
+        const itemName = document.getElementById("stock-item-name").value;
+        const response = await fetch(`${API_BASE_URL}/stock/${itemName}`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ quantity: parseInt(data.quantity) })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ quantity: pendingStockQuantity })
         });
-        
         if (response.ok) {
             showToast("Stock updated successfully!");
             closeModal(updateStockModal);
@@ -517,7 +568,6 @@ async function handleUpdateStock(e) {
             showToast(error.error || "Error updating stock", "error");
         }
     } catch (error) {
-        console.error("Error updating stock:", error);
         showToast("Error updating stock", "error");
     } finally {
         showLoading(false);
@@ -604,5 +654,34 @@ function debounce(func, wait) {
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
     };
+}
+
+// Add handler for adding new stock item
+async function handleAddStockItem(e) {
+    e.preventDefault();
+    try {
+        showLoading(true);
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+        data.quantity = parseInt(data.quantity) || 0;
+        data.danger_level = parseInt(data.danger_level) || 30;
+        const response = await fetch(`${API_BASE_URL}/stock`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+        if (response.ok) {
+            showToast("Stock item added successfully!");
+            closeModal(addStockItemModal);
+            loadStock();
+        } else {
+            const error = await response.json();
+            showToast(error.error || "Error adding stock item", "error");
+        }
+    } catch (error) {
+        showToast("Error adding stock item", "error");
+    } finally {
+        showLoading(false);
+    }
 }
 

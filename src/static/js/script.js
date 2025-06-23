@@ -2,6 +2,8 @@
 const API_BASE_URL = "/api";
 
 let pendingStockQuantity = 0;
+let currentICardEmployeeId = null;
+let photoUploaded = false;
 
 // DOM elements
 const navItems = document.querySelectorAll(".nav-item");
@@ -389,6 +391,9 @@ function displayEmployees(employees) {
                 <button class="btn btn-danger" onclick="deleteEmployee('${employee.employee_id}')">
                     <i class="fas fa-trash"></i> Delete
                 </button>
+                <button class="btn btn-secondary" onclick="openICardModal('${employee.employee_id}')">
+                    <i class="fas fa-id-card"></i> I'card
+                </button>
             </div>
         </div>
     `).join("");
@@ -701,4 +706,53 @@ async function handleAddStockItem(e) {
         showLoading(false);
     }
 }
+
+function openICardModal(employeeId) {
+    currentICardEmployeeId = employeeId;
+    photoUploaded = false;
+    document.getElementById('icardModal').style.display = 'block';
+    document.getElementById('icardPhotoInput').value = '';
+    document.getElementById('getICardBtn').disabled = true;
+    document.getElementById('icardUploadStatus').innerText = '';
+}
+
+function closeICardModal() {
+    document.getElementById('icardModal').style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('uploadPhotoBtn').onclick = function() {
+        const fileInput = document.getElementById('icardPhotoInput');
+        if (!fileInput.files[0]) {
+            alert('Please select a photo.');
+            return;
+        }
+        const formData = new FormData();
+        formData.append('photo', fileInput.files[0]);
+        formData.append('employee_id', currentICardEmployeeId);
+
+        fetch('/api/employees/upload_photo', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('icardUploadStatus').innerText = 'Photo uploaded!';
+                document.getElementById('getICardBtn').disabled = false;
+                photoUploaded = true;
+            } else {
+                document.getElementById('icardUploadStatus').innerText = 'Upload failed: ' + data.error;
+            }
+        })
+        .catch(() => {
+            document.getElementById('icardUploadStatus').innerText = 'Upload failed.';
+        });
+    };
+
+    document.getElementById('getICardBtn').onclick = function() {
+        if (!photoUploaded) return;
+        window.open(`/api/employees/icard/${currentICardEmployeeId}`, '_blank');
+    };
+});
 

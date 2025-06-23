@@ -756,3 +756,22 @@ form {
 .hidden { display: none !important; }
 .visible { display: block !important; }
 
+/* Style for the I-card modal to ensure consistency */
+#icardModal .modal-content {
+    width: 400px; /* Or any specific width */
+}
+
+#icardModal .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+#icardPhotoInput {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+

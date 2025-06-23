@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory Management System</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -13,7 +13,7 @@
         <nav class="sidebar">
             <div class="sidebar-header">
                 <h2 style="display: flex; align-items: center; gap: 0.75rem;">
-                    <img src="static/logo.png" alt="Logo" style="height: 32px; width: 32px; object-fit: contain; vertical-align: middle;" />
+                    <img src="static/images/logo.png" alt="Logo" style="height: 32px; width: 32px; object-fit: contain; vertical-align: middle;" />
                     <span>Infopercept Inventory</span>
                 </h2>
             </div>
@@ -359,7 +359,7 @@
                     <!-- T-shirt sizes will be populated dynamically -->
                 </div>
 
-                <div class="form-actions">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="cancel-update-employee">Cancel</button>
                     <button type="submit" class="btn btn-primary">Update Employee</button>
                 </div>
@@ -433,7 +433,25 @@
     <!-- Toast Notifications -->
     <div id="toast-container" class="toast-container"></div>
 
-    <script src="script.js"></script>
+    <!-- I'card Modal -->
+    <div id="icardModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeICardModal()">&times;</span>
+            <h2>Upload Employee Photo</h2>
+            <div class="form-group">
+                <input type="file" id="icardPhotoInput" accept="image/*">
+            </div>
+            <div class="modal-footer">
+                <button id="uploadPhotoBtn" class="btn btn-primary">Upload Photo</button>
+            </div>
+            <div id="icardUploadStatus" class="mt-2"></div>
+            <hr>
+            <button id="getICardBtn" class="btn btn-success" disabled>Get I'card</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
 </body>
 </html>
 

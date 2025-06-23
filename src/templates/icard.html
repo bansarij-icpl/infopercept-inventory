@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional ID Card</title>
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/icard.css') }}">
+</head>
+
+<body>
+    <div class="id-card">
+        <div class="header">
+            <!-- <div class="logo">Infopercept</div> -->
+            <img src="static/images/Infopercept.svg" alt="Infopercept" class="logo">
+
+        </div>
+        <div class="name-section_container">
+            <div class="first-name">{{ first_name }}</div>
+            <div class="last-name">{{ last_name }}</div>
+        </div>
+        <div class="main-content">
+
+            <div class="photo-container">
+                <div class="photo">
+                    <img src="{{ photo_data or url_for('static', filename='images/default_user.png') }}" alt="user">
+                </div>
+            </div>
+
+            <div class="department">{{ department_name }}</div>
+        </div>
+
+        <div class="side-text">
+            <h2 style="display: flex; gap:3px;" class="emg"> Emg No :
+                <p class="contact">{{ emergency_no }}</p>
+            </h2>
+            <h2 style="display: flex; gap:3px;" class="bg">BG :
+                <p class="blood-type">{{ blood_group }} Ve</p>
+                </h3>
+                <h4 class="icpl">{{ employee_id }}</h4>
+        </div>
+
+        <!-- <div class="contact-info">
+            <div>Contact no - 10.55 Med</div>
+            <div>Er ve - 10.55 Med</div>
+        </div> -->
+
+        <!-- <div class="id-number">#394499</div> -->
+
+        <!-- Color reference swatches -->
+        <div class="color-ref">
+            <div class="color-swatch color1"></div>
+            <div class="color-swatch color2"></div>
+        </div>
+    </div>
+
+</body>
+
+</html>

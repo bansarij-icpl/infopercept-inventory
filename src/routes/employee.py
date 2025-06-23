@@ -1,9 +1,14 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, send_file, render_template, make_response
 from src.models.inventory import db, Employee, Stock
 from src.routes.stock import adjust_stock_for_employee
 import re
+import os
+from io import BytesIO
+from weasyprint import HTML
+import base64
 
 employee_bp = Blueprint("employee", __name__)
+EMP_IMG_FOLDER = os.path.join(os.path.dirname(__file__), '..', 'emp_img')
 
 def validate_email(email):
     """Validate email format"""
@@ -20,6 +25,11 @@ def validate_employee_data(data, is_update=False):
         for field in required_fields:
             if not data.get(field):
                 errors.append(f"{field} is required")
+    
+    # Blood group validation
+    valid_blood_groups = {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"}
+    if data.get("blood_group") and data["blood_group"] not in valid_blood_groups:
+        errors.append("Invalid blood group selected")
     
     # Validate quantities if provided
     item_fields = ["bag_quantity", "pen_quantity", "diary_quantity", "bottle_quantity",
@@ -262,5 +272,56 @@ def get_employee_stats():
         return jsonify(stats), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@employee_bp.route('/employees/upload_photo', methods=['POST'])
+def upload_photo():
+    photo = request.files.get('photo')
+    employee_id = request.form.get('employee_id')
+    if not photo or not employee_id:
+        return jsonify({'success': False, 'error': 'Missing photo or employee_id'}), 400
+    if not os.path.exists(EMP_IMG_FOLDER):
+        os.makedirs(EMP_IMG_FOLDER)
+    ext = os.path.splitext(photo.filename)[1].lower()
+    if ext not in ['.jpg', '.jpeg', '.png']:
+        return jsonify({'success': False, 'error': 'Invalid file type'}), 400
+    filename = f"{employee_id}.jpg"
+    photo.save(os.path.join(EMP_IMG_FOLDER, filename))
+    return jsonify({'success': True})
+
+@employee_bp.route('/employees/icard/<employee_id>', methods=['GET'])
+def generate_icard(employee_id):
+    employee = Employee.query.get(employee_id)
+    if not employee:
+        return "Employee not found", 404
+
+    # Get photo path
+    img_path = os.path.join(EMP_IMG_FOLDER, f"{employee_id}.jpg")
+    photo_data = None
+    if os.path.exists(img_path):
+        with open(img_path, "rb") as img_file:
+            photo_data = "data:image/jpeg;base64," + base64.b64encode(img_file.read()).decode('utf-8')
+    else:
+        # Use a placeholder image or blank
+        photo_data = None
+
+    # Render HTML with employee data
+    html = render_template(
+        "icard.html",
+        first_name=employee.first_name,
+        last_name=employee.last_name,
+        emergency_no=employee.emergency_no,
+        blood_group=employee.blood_group,
+        department_name=employee.department_name,
+        employee_id=employee.employee_id,
+        photo_data=photo_data
+    )
+
+    # Generate PDF from HTML
+    pdf = HTML(string=html, base_url=request.host_url).write_pdf()
+
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename={employee_id}_icard.pdf'
+    return response
 
 

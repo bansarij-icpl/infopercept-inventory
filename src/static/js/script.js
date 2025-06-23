@@ -131,6 +131,22 @@ function setupEventListeners() {
             openUpdateStockModal(itemName, quantity);
         }
     });
+
+    document.getElementById('getICardBtn').addEventListener('click', function() {
+        const employeeId = /* get the relevant employee ID */
+        fetch(`/employees/icard/${employeeId}`)
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${employeeId}_icard.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            });
+    });
 }
 
 function setupQuantityControls() {

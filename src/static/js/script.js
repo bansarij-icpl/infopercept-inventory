@@ -248,7 +248,7 @@ function updateLowStockAlerts(lowStockItems) {
     
     if (lowStockItems.length === 0) {
         alertsContainer.innerHTML = `
-            <div class="alert alert-info" style="border-left: 4px solid #667eea; background: #f4f7ff; padding: 1.5rem; border-radius: 1rem; margin-bottom: 1rem;">
+            <div class="alert alert-info" style="border-left: 4px solid #667eea; background: #f4f7ff; padding: 1.5rem; border-radius: 1rem; margin-bottom: 1rem; ">
                 <h4 style="color: #2d3748; margin-bottom: 0.5rem;">All Good!</h4>
                 <p style="color: #4a5568;">No items are currently low in stock.</p>
             </div>

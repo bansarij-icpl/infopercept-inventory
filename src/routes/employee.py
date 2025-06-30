@@ -1,11 +1,12 @@
-from flask import Blueprint, request, jsonify, send_file, render_template, make_response
+from flask import Blueprint, request, jsonify, send_file, render_template, make_response, Response
 from src.models.inventory import db, Employee, Stock
 from src.routes.stock import adjust_stock_for_employee
 import re
 import os
-from io import BytesIO
+from io import BytesIO, StringIO
 from weasyprint import HTML
 import base64
+import csv
 
 employee_bp = Blueprint("employee", __name__)
 EMP_IMG_FOLDER = os.path.join(os.path.dirname(__file__), '..', 'emp_img')
@@ -323,5 +324,32 @@ def generate_icard(employee_id):
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = f'attachment; filename={employee_id}_icard.pdf'
     return response
+
+@employee_bp.route('/export/employees')
+def export_employees():
+    output = StringIO()
+    writer = csv.writer(output)
+    # Write header
+    writer.writerow([
+        'Employee ID', 'First Name', 'Last Name', 'Emergency No',
+        'Blood Group', 'Department Name', 'Bag', 'Pen', 'Diary', 'Bottle',
+        'T-shirt S', 'T-shirt M', 'T-shirt L', 'T-shirt XL', 'T-shirt XXL', 'T-shirt XXXL'
+    ])
+    # Query all employees
+    employees = Employee.query.all()
+    for emp in employees:
+        writer.writerow([
+            emp.employee_id, emp.first_name, emp.last_name, emp.emergency_no,
+            emp.blood_group, emp.department_name, emp.bag_quantity, emp.pen_quantity,
+            emp.diary_quantity, emp.bottle_quantity, emp.tshirt_s_quantity,
+            emp.tshirt_m_quantity, emp.tshirt_l_quantity, emp.tshirt_xl_quantity,
+            emp.tshirt_xxl_quantity, emp.tshirt_xxxl_quantity
+        ])
+    output.seek(0)
+    return Response(
+        output,
+        mimetype='text/csv',
+        headers={'Content-Disposition': 'attachment;filename=employees.csv'}
+    )
 
 

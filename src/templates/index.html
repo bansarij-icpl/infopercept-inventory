@@ -163,12 +163,23 @@
 
             <!-- Stock Management Page -->
             <div id="stock-page" class="page">
-                
+                <div style="display: flex; justify-content: flex-end; align-items: center;">
+                    <button id="export-stock-btn" class="btn btn-secondary" title="Export Stock CSV">
+                        <i class="fa-solid fa-file-csv"></i> Export
+                    </button>
+                </div>
                 <h2 style="margin-top: 20px; margin-bottom: 20px;">Standard Items
 
-                    <button class="btn btn-success" id="add-stock-item-btn" style="margin-bottom: 20px; margin-left: 1370px;">
+                    <!-- <button class="btn btn-success" id="add-stock-item-btn" style="margin-bottom: 20px; margin-left: 1370px;">
                         <i class="fas fa-plus"></i> Add New Item
-                    </button>
+                    </button> -->
+
+                    <div class="btn-container">
+                        <button class="btn btn-success" id="add-stock-item-btn">
+                          <i class="fas fa-plus"></i> Add New Item
+                        </button>
+                      </div>
+                      
 
                 </h2>
                 
@@ -186,6 +197,11 @@
 
             <!-- Employee Management Page -->
             <div id="employees-page" class="page">
+                <div style="display: flex; justify-content: flex-end; align-items: center;">
+                    <button id="export-employee-btn" class="btn btn-secondary" title="Export Employees CSV">
+                        <i class="fa-solid fa-file-csv"></i> Export
+                    </button>
+                </div>
                 <div class="employees-grid" id="employees-grid">
                     <!-- Employees will be populated here -->
                 </div>

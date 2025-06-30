@@ -1,7 +1,9 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Response
 from src.models.inventory import db, Stock
 from src.database_init import get_low_stock_items
 from src.email_service import send_low_stock_alert
+import csv
+from io import StringIO
 
 stock_bp = Blueprint("stock", __name__)
 
@@ -123,7 +125,6 @@ def adjust_stock_for_employee(item_quantities):
         db.session.rollback()
         raise e
 
-
 @stock_bp.route("/stock", methods=["POST"])
 def add_stock_item():
     """Add a new stock item"""
@@ -143,3 +144,20 @@ def add_stock_item():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+
+@stock_bp.route('/export/stock')
+def export_stock():
+    output = StringIO()
+    writer = csv.writer(output)
+    # Write header
+    writer.writerow(['Item Name', 'Quantity', 'Danger Level'])
+    # Query all stock items
+    stocks = Stock.query.all()
+    for item in stocks:
+        writer.writerow([item.item_name, item.quantity, item.danger_level])
+    output.seek(0)
+    return Response(
+        output,
+        mimetype='text/csv',
+        headers={'Content-Disposition': 'attachment;filename=stock.csv'}
+    )

@@ -147,6 +147,25 @@ function setupEventListeners() {
                 window.URL.revokeObjectURL(url);
             });
     });
+
+
+    // Stock Export
+    const exportStockBtn = document.getElementById('export-stock-btn');
+    if (exportStockBtn) {
+        exportStockBtn.addEventListener('click', function() {
+            window.location.href = '/api/export/stock';  
+        });
+    }
+
+    // Employee Export
+    const exportEmployeeBtn = document.getElementById('export-employee-btn');
+    if (exportEmployeeBtn) {
+        exportEmployeeBtn.addEventListener('click', function() {
+            window.location.href = '/api/export/employees';  
+        });
+    }
+
+
 }
 
 function setupQuantityControls() {

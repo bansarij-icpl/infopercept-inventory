@@ -8,8 +8,8 @@ PYTHON_PATH=$(which python3)
 # Get the absolute path to the script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"  # One level up from /src
-MAIN_PY="$SCRIPT_DIR/main.py"
-BACKUP_PY="$SCRIPT_DIR/db_backup.py"
+MAIN_PY="$SCRIPT_DIR/src/main.py"
+BACKUP_PY="$SCRIPT_DIR/src/db_backup.py"
 SERVICE_DIR="/etc/$SERVICE_NAME"
 
 # 1. Create service directory
@@ -41,7 +41,7 @@ sudo systemctl enable "$SERVICE_NAME"
 sudo systemctl restart "$SERVICE_NAME"
 
 # 5. Set up cron job for db_backup.py (runs every day at 4:00 PM)
-CRON_JOB="0 16 * * * $PYTHON_PATH $BACKUP_PY >> $SCRIPT_DIR/database/backup.log 2>&1"
+CRON_JOB="0 16 * * * $PYTHON_PATH $BACKUP_PY >> $SCRIPT_DIR/src/database/backup.log 2>&1"
 ( crontab -l -u "$USER_NAME" 2>/dev/null | grep -v "$BACKUP_PY" ; echo "$CRON_JOB" ) | crontab -u "$USER_NAME" -
 
 # 6. Final message

@@ -450,17 +450,18 @@ async function openUpdateEmployeeModal(employeeId) {
         showLoading(true);
         const response = await fetch(`${API_BASE_URL}/employees/${employeeId}`);
         const employee = await response.json();
-        
-        // Populate form
+
+        // Populate form with correct fields
         document.getElementById("update-employee-id").value = employee.employee_id;
-        document.getElementById("update-employee-name").value = employee.name;
-        document.getElementById("update-employee-email").value = employee.email;
-        document.getElementById("update-employee-department").value = employee.department;
-        document.getElementById("update-employee-designation").value = employee.designation;
-        
-        // Populate kit items
+        document.getElementById("update-employee-first-name").value = employee.first_name;
+        document.getElementById("update-employee-last-name").value = employee.last_name;
+        document.getElementById("update-employee-emergency-no").value = employee.emergency_no;
+        document.getElementById("update-employee-blood-group").value = employee.blood_group;
+        document.getElementById("update-employee-department").value = employee.department_name;
+
+        // Populate kit items and t-shirt sizes
         populateUpdateKitItems(employee);
-        
+
         showModal(updateEmployeeModal);
     } catch (error) {
         console.error("Error loading employee:", error);

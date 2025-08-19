@@ -11,13 +11,23 @@ REQUIREMENTS_FILE="$PROJECT_DIR/requirements.txt"
 SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
 BACKUP_LOG="$PROJECT_DIR/src/database/backup.log"
 
+# --- Step 0: Install required system packages ---
+echo "📦 Installing required system dependencies..."
+sudo apt update
+sudo apt install -y \
+    python3-venv python3-dev build-essential \
+    libpangocairo-1.0-0 libpango-1.0-0 libcairo2 libcairo2-dev \
+    libgdk-pixbuf-2.0-0 libffi-dev shared-mime-info \
+    fonts-liberation fonts-dejavu-core
+
 # --- Step 1: Create virtual environment ---
 echo "📦 Creating virtual environment..."
+rm -rf "$PROJECT_DIR/venv"   # Ensure clean venv
 python3 -m venv "$PROJECT_DIR/venv"
 
 echo "📦 Activating venv & installing dependencies..."
 source "$PROJECT_DIR/venv/bin/activate"
-pip install --upgrade pip
+pip install --upgrade pip wheel setuptools
 if [[ -f "$REQUIREMENTS_FILE" ]]; then
     pip install -r "$REQUIREMENTS_FILE"
 else

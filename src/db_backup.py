@@ -14,8 +14,11 @@ def backup_sqlite_db(db_path, backup_dir):
     print(f"Backup created at: {backup_file}")
 
 if __name__ == "__main__":
-    # Absolute path to your database
-    db_path = "/home/bansarij/Bansi/inventory_management/inventory_management_system_tshirt_sizes/inventory_management_system/src/database/app.db"
-    # Absolute path to your backup directory
-    backup_dir = "/home/bansarij/Bansi/inventory_management/inventory_management_system_tshirt_sizes/inventory_management_system/src/database/backups"
+    # Get the project root directory (infopercept-inventory folder)
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    
+    # Relative paths from project root
+    db_path = os.path.join(project_root, "src", "database", "app.db")
+    backup_dir = os.path.join(project_root, "src", "database", "backups")
+    
     backup_sqlite_db(db_path, backup_dir)
